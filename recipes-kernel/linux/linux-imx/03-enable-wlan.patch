@@ -1,0 +1,106 @@
+diff -ur kernel-source.org/arch/arm64/boot/dts/freescale/imx8mm-evk.dts kernel-source/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+--- kernel-source.org/arch/arm64/boot/dts/freescale/imx8mm-evk.dts	2024-07-31 14:27:23.653155607 +0000
++++ kernel-source/arch/arm64/boot/dts/freescale/imx8mm-evk.dts	2024-07-31 18:02:33.872856932 +0000
+@@ -79,6 +79,18 @@
+ };
+ 
+ &iomuxc {
++
++        pinctrl_hog: hoggrp {
++                fsl,pins = <
++                        MX8MM_IOMUXC_SD1_STROBE_GPIO2_IO11      0x19
++                        MX8MM_IOMUXC_NAND_DATA01_GPIO3_IO7      0x19
++                        MX8MM_IOMUXC_NAND_DATA03_GPIO3_IO9      0x19
++                        MX8MM_IOMUXC_SPDIF_RX_GPIO5_IO4         0x19
++                        MX8MM_IOMUXC_SAI1_TXFS_GPIO4_IO10       0x19
++                        MX8MM_IOMUXC_SAI1_RXD7_GPIO4_IO9        0x19
++                >;
++        };
++
+ 	pinctrl_reg_usdhc1_vmmc: regusdhc1vmmcgrp {
+ 		fsl,pins = <
+ 			MX8MM_IOMUXC_SD1_RESET_B_GPIO2_IO10	0x141
+@@ -163,6 +175,30 @@
+         };
+ };
+ 
++&gpio2 {
++        zb-reset-hog {
++                gpio-hog;
++                gpios = <11 GPIO_ACTIVE_LOW>;
++                output-low;
++                line-name = "zb-reset";
++        };
++};
++
++&gpio3 {
++        wlan-power-down-hog {
++                gpio-hog;
++                gpios = <7 GPIO_ACTIVE_LOW>;
++                output-low;
++                line-name = "wlan-power-down";
++        };
++        bt-reset-hog {
++                gpio-hog;
++                gpios = <9 GPIO_ACTIVE_LOW>;
++                output-low;
++                line-name = "bt-reset";
++        };
++};
++
+ &gpio5 {
+        audio-shutdown-hog {
+                 gpio-hog;
+diff -ur kernel-source.org/scripts/dtc/include-prefixes/arm64/freescale/imx8mm-evk.dts kernel-source/scripts/dtc/include-prefixes/arm64/freescale/imx8mm-evk.dts
+--- kernel-source.org/scripts/dtc/include-prefixes/arm64/freescale/imx8mm-evk.dts	2024-07-31 14:27:23.653155607 +0000
++++ kernel-source/scripts/dtc/include-prefixes/arm64/freescale/imx8mm-evk.dts	2024-07-31 18:02:33.872856932 +0000
+@@ -79,6 +79,18 @@
+ };
+ 
+ &iomuxc {
++
++        pinctrl_hog: hoggrp {
++                fsl,pins = <
++                        MX8MM_IOMUXC_SD1_STROBE_GPIO2_IO11      0x19
++                        MX8MM_IOMUXC_NAND_DATA01_GPIO3_IO7      0x19
++                        MX8MM_IOMUXC_NAND_DATA03_GPIO3_IO9      0x19
++                        MX8MM_IOMUXC_SPDIF_RX_GPIO5_IO4         0x19
++                        MX8MM_IOMUXC_SAI1_TXFS_GPIO4_IO10       0x19
++                        MX8MM_IOMUXC_SAI1_RXD7_GPIO4_IO9        0x19
++                >;
++        };
++
+ 	pinctrl_reg_usdhc1_vmmc: regusdhc1vmmcgrp {
+ 		fsl,pins = <
+ 			MX8MM_IOMUXC_SD1_RESET_B_GPIO2_IO10	0x141
+@@ -163,6 +175,30 @@
+         };
+ };
+ 
++&gpio2 {
++        zb-reset-hog {
++                gpio-hog;
++                gpios = <11 GPIO_ACTIVE_LOW>;
++                output-low;
++                line-name = "zb-reset";
++        };
++};
++
++&gpio3 {
++        wlan-power-down-hog {
++                gpio-hog;
++                gpios = <7 GPIO_ACTIVE_LOW>;
++                output-low;
++                line-name = "wlan-power-down";
++        };
++        bt-reset-hog {
++                gpio-hog;
++                gpios = <9 GPIO_ACTIVE_LOW>;
++                output-low;
++                line-name = "bt-reset";
++        };
++};
++
+ &gpio5 {
+        audio-shutdown-hog {
+                 gpio-hog;

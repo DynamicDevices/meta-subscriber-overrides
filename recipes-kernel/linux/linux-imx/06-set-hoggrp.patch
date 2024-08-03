@@ -1,0 +1,34 @@
+diff -ur kernel-source.org/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi kernel-source/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+--- kernel-source.org/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi	2024-08-03 11:00:36.599091575 +0000
++++ kernel-source/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi	2024-08-03 11:12:50.717174107 +0000
+@@ -699,7 +699,7 @@
+ 		<&clk IMX8MM_AUDIO_PLL1_OUT>, <&clk IMX8MM_AUDIO_PLL2_OUT>;
+ 	clock-names = "core", "rxtx0", "rxtx1", "rxtx2", "rxtx3",
+ 		"rxtx4", "rxtx5", "rxtx6", "rxtx7", "spba", "pll8k", "pll11k";
+-	status = "okay";
++	status = "disabled";
+ };
+ 
+ &uart1 { /* BT */
+@@ -798,6 +798,21 @@
+ };
+ 
+ &iomuxc {
++        pinctrl-names = "default";
++        pinctrl-0 = <&pinctrl_hog>;
++
++        // TODO: Break these out better?
++        pinctrl_hog: hoggrp {
++                fsl,pins = <
++                        MX8MM_IOMUXC_SD1_STROBE_GPIO2_IO11      0x19
++                        MX8MM_IOMUXC_NAND_DATA01_GPIO3_IO7      0x19
++                        MX8MM_IOMUXC_NAND_DATA03_GPIO3_IO9      0x19
++                        MX8MM_IOMUXC_SPDIF_RX_GPIO5_IO4         0x19
++                        MX8MM_IOMUXC_SAI1_TXFS_GPIO4_IO10       0x19
++                        MX8MM_IOMUXC_SAI1_RXD7_GPIO4_IO9        0x19
++                >;
++        };
++
+ 	pinctrl_ir_recv: ir-recv {
+ 		fsl,pins = <
+ 			MX8MM_IOMUXC_GPIO1_IO13_GPIO1_IO13		0x4f

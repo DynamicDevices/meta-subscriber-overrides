@@ -1,0 +1,25 @@
+--- a/tas2563-regmap.c
++++ b/tas2563-regmap.c
+@@ -627,8 +631,7 @@ end:
+ * platform dependent
+ * should implement hardware reset functionality
+ */
+-static int tas2563_i2c_probe(struct i2c_client *pClient,
+-	const struct i2c_device_id *pID)
++static int tas2563_i2c_probe(struct i2c_client *pClient)
+ {
+ 	struct tas2563_priv *pTAS2563;
+ 	int nResult = 0;
+diff --git a/tiload.c b/tiload.c
+index 49369f5..e9a0a90 100755
+--- a/tiload.c
++++ b/tiload.c
+@@ -384,7 +384,7 @@ int tiload_driver_init(struct tas2563_priv *pTAS2563)
+ 		dev_err(pTAS2563->dev, "cannot allocate major number %d\n", tiload_major);
+ 		return result;
+ 	}
+-	tiload_class = class_create(THIS_MODULE, DEVICE_NAME);
++	tiload_class = class_create(DEVICE_NAME);
+ 	tiload_major = MAJOR(dev);
+ 	dev_info(pTAS2563->dev, "allocated Major Number: %d\n", tiload_major);
+ 

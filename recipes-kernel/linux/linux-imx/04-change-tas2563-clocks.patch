@@ -1,0 +1,16 @@
+diff -ur kernel-source.org/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi kernel-source/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+--- kernel-source.org/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi	2024-07-31 18:05:07.811882596 +0000
++++ kernel-source/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi	2024-08-01 14:17:40.364233213 +0000
+@@ -646,6 +646,12 @@
+ 	assigned-clocks = <&clk IMX8MM_CLK_SAI3>;
+ 	assigned-clock-parents = <&clk IMX8MM_AUDIO_PLL1_OUT>;
+ 	assigned-clock-rates = <24576000>;
++	clocks = <&clk IMX8MM_CLK_SAI3_IPG>, <&clk IMX8MM_CLK_DUMMY>,
++	<&clk IMX8MM_CLK_SAI3_ROOT>, <&clk IMX8MM_CLK_DUMMY>,
++	<&clk IMX8MM_CLK_DUMMY>,
++	<&clk IMX8MM_AUDIO_PLL1_OUT>,
++	<&clk IMX8MM_AUDIO_PLL2_OUT>;
++	clock-names = "bus", "mclk0", "mclk1", "mclk2", "mclk3", "pll8k", "pll11k";
+ 	fsl,sai-mclk-direction-output;
+ 	status = "okay";
+ };

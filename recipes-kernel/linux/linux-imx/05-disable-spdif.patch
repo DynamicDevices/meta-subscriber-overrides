@@ -1,0 +1,11 @@
+diff -ur kernel-source.org/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi kernel-source/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+--- kernel-source.org/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi	2024-08-02 14:43:27.553232475 +0000
++++ kernel-source/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi	2024-08-03 10:06:33.831466515 +0000
+@@ -215,6 +215,7 @@
+ 		spdif-controller = <&spdif1>;
+ 		spdif-out;
+ 		spdif-in;
++                status = "disabled";
+ 	};
+ 
+ 	sound-micfil {

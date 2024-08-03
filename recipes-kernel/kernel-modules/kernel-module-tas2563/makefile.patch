@@ -1,0 +1,16 @@
+diff --git a/Makefile b/Makefile
+index 05bcae1..c1eb0e6 100755
+--- a/Makefile
++++ b/Makefile
+@@ -1,2 +1,10 @@
+ snd-soc-tas2563-objs := tas2563-regmap.o tas2563-codec.o tas2563-misc.o tiload.o
+-obj-$(CONFIG_SND_SOC_TAS2563) += snd-soc-tas2563.o
++ccflags-y := -DCONFIG_TAS2563_REGMAP=1 -DCONFIG_TAS2563_CODEC=1 -DCONFIG_TAS2563_MISC=1 -DCONFIG_OF=1 -DCONFIG_COMPAT=1
++obj-m += snd-soc-tas2563.o
++SRC := $(shell pwd)
++
++all:
++       $(MAKE) -C $(KERNEL_SRC) M=$(SRC) modules
++
++modules_install:
++       $(MAKE) -C $(KERNEL_SRC) M=$(SRC) modules_install

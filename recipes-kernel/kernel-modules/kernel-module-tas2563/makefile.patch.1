@@ -1,0 +1,15 @@
+iff -ur git.org/Makefile git/Makefile
+--- git.org/Makefile	2024-07-17 18:51:10.114997978 +0000
++++ git/Makefile	2024-07-17 18:52:23.814475175 +0000
+@@ -1,2 +1,10 @@
+ snd-soc-tas2563-objs := tas2563-regmap.o tas2563-codec.o tas2563-misc.o tiload.o
+-obj-$(CONFIG_SND_SOC_TAS2563) += snd-soc-tas2563.o
++obj-m += snd-soc-tas2563.o
++SRC := $(shell pwd)
++
++all:
++	$(MAKE) -C $(KERNEL_SRC) M=$(SRC) modules
++
++modules_install:
++	$(MAKE) -C $(KERNEL_SRC) M=$(SRC) modules_install
++

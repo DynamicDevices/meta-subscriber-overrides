@@ -1,0 +1,104 @@
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+index 932bb7cc3bb9..ec2d8ebeb416 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+@@ -7,6 +7,7 @@
+ 
+ #include <dt-bindings/usb/pd.h>
+ #include "imx8mm-evk.dtsi"
++#include <dt-bindings/gpio/gpio.h>
+ 
+ / {
+ 	model = "FSL i.MX8MM EVK board";
+@@ -150,4 +151,51 @@ MX8MM_IOMUXC_GPIO1_IO00_ANAMIX_REF_CLK_32K	0x141
+ 			MX8MM_IOMUXC_SD1_DATA7_GPIO2_IO9		0x159
+ 		>;
+ 	};
++
++	pinctrl_sai3: sai3grp {
++                fsl,pins = <
++                        MX8MM_IOMUXC_SAI3_TXFS_SAI3_TX_SYNC     0xd6
++                        MX8MM_IOMUXC_SAI3_TXC_SAI3_TX_BCLK      0xd6
++                        MX8MM_IOMUXC_SAI3_MCLK_SAI3_MCLK        0xd6
++                        MX8MM_IOMUXC_SAI3_TXD_SAI3_TX_DATA0     0xd6
++                        MX8MM_IOMUXC_SPDIF_EXT_CLK_GPIO5_IO5    0xd6 // Audio codec interrupt
++                >;
++        };
++};
++
++&gpio5 {
++       audio-shutdown-hog {
++                gpio-hog;
++                gpios = <4 GPIO_ACTIVE_LOW>;
++                output-low;
++                line-name = "tas2563-shutdown";
++       };
+ };
++
++&i2c2 {
++        clock-frequency = <400000>;
++        pinctrl-names = "default";
++        pinctrl-0 = <&pinctrl_i2c2>;
++        status = "okay";
++ 
++        // Audio Amp
++        tas2563: tas2563@4C {
++                #sound-dai-cells = <0>;
++                compatible = "ti,tas2563";
++                reg = <0x4C>;
++                ti,channels = <1>; /* channel number */
++//              ti,reset-gpio = <&gpio5 4 GPIO_ACTIVE_HIGH>;
++                ti,irq-gpio = <&gpio5 5 GPIO_ACTIVE_LOW>;
++                ti,asi-format = <0>; /* 0, i2S; 1, DSP;  */
++                ti,left-slot = <0>; /* <left slot number> */
++                ti,right-slot = <1>; /* <right slot number> */
++                ti,imon-slot-no = <0>; /* <current sense slot number> */
++                ti,vmon-slot-no = <2>; /* <current voltage slot number> */
++                ti,echo-ref = <2>;
++                ti,bypass-tmax = <1>; /* 0, not bypass; 1, bypass */
++                ti,i2s-bits = <32>;
++                status = "ok";
++        };
++};
++
++
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+index c0c9eb08f598..fb6f4f70702b 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+@@ -134,18 +134,18 @@ simple-audio-card,codec {
+ 		};
+ 	};
+ 
+-	sound-wm8524 {
++	sound-tas2563 {
+ 		compatible = "simple-audio-card";
+-		simple-audio-card,name = "wm8524-audio";
++		simple-audio-card,name = "tas2563-audio";
+ 		simple-audio-card,format = "i2s";
+ 		simple-audio-card,frame-master = <&cpudai>;
+ 		simple-audio-card,bitclock-master = <&cpudai>;
+-		simple-audio-card,widgets =
+-			"Line", "Left Line Out Jack",
+-			"Line", "Right Line Out Jack";
+-		simple-audio-card,routing =
+-			"Left Line Out Jack", "LINEVOUTL",
+-			"Right Line Out Jack", "LINEVOUTR";
++		//simple-audio-card,widgets =
++		//	"Line", "Left Line Out Jack",
++		//	"Line", "Right Line Out Jack";
++		//simple-audio-card,routing =
++		//	"Left Line Out Jack", "LINEVOUTL",
++		//	"Right Line Out Jack", "LINEVOUTR";
+ 
+ 		cpudai: simple-audio-card,cpu {
+ 			sound-dai = <&sai3>;
+@@ -154,7 +154,7 @@ cpudai: simple-audio-card,cpu {
+ 		};
+ 
+ 		simple-audio-card,codec {
+-			sound-dai = <&wm8524>;
++			sound-dai = <&tas2563>;
+ 			clocks = <&clk IMX8MM_CLK_SAI3_ROOT>;
+ 		};
+ 	};
